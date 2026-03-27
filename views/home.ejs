@@ -1,1 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorkSave - Home</title>
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&family=Roboto+Mono&display=swap" rel="stylesheet">
+</head>
+<body class="home-page">
+    <div class="home-container">
+        <header>
+            <h1>WorkSave</h1>
+            <% if (loggedIn) { %>
+                <p>Welcome back! Here are your notes.</p>
+                <div class="user-meta">
+                    <a href="/logout" class="link logout-link">Logout</a>
+                </div>
+            <% } else { %>
+                <p>Your secure, minimalist notepad sharing service.</p>
+            <% } %>
+        </header>
 
+        <main>
+            <% if (loggedIn) { %>
+                <section class="dashboard-section">
+                    <h2>My Notes</h2>
+                    <% if (myNotes.length > 0) { %>
+                        <ul class="note-list">
+                            <% myNotes.forEach(note => { %>
+                                <li>
+                                    <a href="/<%= note.pageId %>" class="note-item">
+                                        <span class="note-id"><%= note.pageId %></span>
+                                        <span class="note-preview"><%= note.content.substring(0, 30) %><%= note.content.length > 30 ? '...' : '' %></span>
+                                    </a>
+                                </li>
+                            <% }) %>
+                        </ul>
+                    <% } else { %>
+                        <p class="empty-msg">You haven't created any notes yet.</p>
+                    <% } %>
+                </section>
+                <hr class="divider">
+            <% } %>
+
+            <section class="access-section">
+                <h2>Access a Notepad</h2>
+                <form action="/access" method="POST" class="access-form">
+                    <div class="input-group">
+                        <label for="pageId">Enter Access Code (Page ID)</label>
+                        <input type="text" id="pageId" name="pageId" placeholder="e.g. secret-meeting" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="passcode">Passcode (Optional)</label>
+                        <input type="password" id="passcode" name="passcode" placeholder="6-digit code if required" maxlength="6">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Go to Notepad</button>
+                    <p class="helper-text">Enter both Code and Passcode to bypass the overlay (fix "two times").</p>
+                </form>
+            </section>
+
+            <% if (!loggedIn) { %>
+                <section class="auth-section">
+                    <p>New here? <a href="/register" class="link">Create an account</a> to manage your notes easily.</p>
+                    <p>Or <a href="/login" class="link">Login</a> to see your existing notes.</p>
+                </section>
+            <% } %>
+        </main>
+
+        <footer>
+            <p>&copy; 2026 WorkSave. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorkSave - Register</title>
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&family=Roboto+Mono&display=swap" rel="stylesheet">
+</head>
+<body class="register-page">
+    <div class="auth-container">
+        <header>
+            <h1>Create Account</h1>
+            <p>Join WorkSave to start sharing your notes securely.</p>
+        </header>
+
+        <form action="/register" method="POST" class="auth-form">
+            <div class="input-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Choose a unique username" required>
+            </div>
+            <div class="input-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Create a strong password" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Create Your Account</button>
+        </form>
+
+        <p class="auth-switch">Already have an account? <a href="/login" class="link">Login here</a></p>
+    </div>
+</body>
+</html>

@@ -3,6 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
 const bodyParser = require("body-parser");
+const session = require("express-session"); // Added session
 const noteRoutes = require("./routes/noteRoutes");
 
 const app = express();
@@ -11,6 +12,21 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.set("view engine", "ejs");
+
+// Session Setup
+app.use(session({
+    secret: "worksave-secret-key-123456",
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false } // Set to true if using HTTPS
+}));
+
+// Make user session available in all layouts
+app.use((req, res, next) => {
+    res.locals.loggedIn = !!req.session.userId;
+    res.locals.userId = req.session.userId;
+    next();
+});
 
 // Log environment variables for debugging
 console.log("-----------------------------------------");

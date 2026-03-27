@@ -110,3 +110,183 @@ body.scrollable::-webkit-scrollbar-thumb {
     background: #03dac5;
     border-radius: 10px;
 }
+
+/* Home & Register Pages Styles */
+.home-page, .register-page {
+    overflow-y: auto;
+    font-family: 'Outfit', sans-serif;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #121212 0%, #1a1a1a 100%);
+}
+
+.home-container, .auth-container {
+    max-width: 500px;
+    width: 90%;
+    background: #1e1e1e;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    text-align: center;
+    border: 1px solid #333;
+}
+
+header h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+    background: none;
+    border: none;
+    padding: 0;
+    color: #03dac5;
+}
+
+header p {
+    color: #888;
+    margin-bottom: 30px;
+}
+
+.input-group {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #bbb;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    background: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.input-group input:focus {
+    border-color: #03dac5;
+}
+
+.btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    font-family: 'Outfit', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-primary {
+    background-color: #03dac5;
+    color: #121212;
+}
+
+.btn-secondary {
+    background-color: transparent;
+    border: 1px solid #03dac5;
+    color: #03dac5;
+}
+
+.btn-secondary:hover {
+    background-color: rgba(3, 218, 197, 0.1);
+}
+
+.auth-section, .auth-switch {
+    margin-top: 25px;
+    color: #888;
+    font-size: 14px;
+}
+
+.link {
+    color: #03dac5;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
+
+footer {
+    margin-top: 30px;
+    font-size: 12px;
+    color: #555;
+}
+
+/* Dashboard Styles */
+.dashboard-section {
+    text-align: left;
+    margin-bottom: 30px;
+}
+
+.note-list {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+.note-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background: #2a2a2a;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    text-decoration: none;
+    transition: transform 0.2s, background 0.2s;
+    border: 1px solid #333;
+}
+
+.note-item:hover {
+    transform: translateY(-2px);
+    background: #333;
+    border-color: #03dac5;
+}
+
+.note-id {
+    font-weight: 600;
+    color: #03dac5;
+}
+
+.note-preview {
+    font-size: 14px;
+    color: #888;
+    max-width: 60%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.divider {
+    border: 0;
+    border-top: 1px solid #333;
+    margin: 30px 0;
+}
+
+.helper-text {
+    font-size: 12px;
+    color: #666;
+    margin-top: 10px;
+}
+
+.logout-link {
+    font-size: 14px;
+    color: #f44336;
+}
+
+.user-meta {
+    margin-top: 10px;
+}
+
+.empty-msg {
+    color: #666;
+    font-style: italic;
+}

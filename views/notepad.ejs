@@ -5,15 +5,17 @@
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
+<% if (showPasscode) { %>
     <div id="passcodeOverlay">
         <h2 id="promptTitle">Enter 6-digit Passcode</h2>
         <input type="password" id="passcodeInput" maxlength="6">
         <button onclick="submitPasscode()">Submit</button>
         <p id="message"></p>
     </div>
+<% } %>
 
     <h1>Workspace: <%= note.pageId %></h1>
-    <textarea id="noteArea" placeholder="Start typing your notes here..." style="display:none;"><%= note.content %></textarea>
+    <textarea id="noteArea" placeholder="Start typing your notes here..." style="<%= showPasscode ? 'display:none;' : 'display:block;' %>"><%= note.content %></textarea>
 
     <script>
         const pageId = "<%= note.pageId %>";

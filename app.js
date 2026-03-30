@@ -24,7 +24,14 @@ app.use(async (req, res, next) => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
+app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
+
+// Debug: Log every request to Vercel console
+app.use((req, res, next) => {
+  console.log(`📡 Route hit: ${req.method} ${req.url}`);
+  next();
+});
 
 // 3. User Session Setup
 app.use(session({

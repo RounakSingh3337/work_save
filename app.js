@@ -6,6 +6,8 @@ const bodyParser = require("body-parser");
 const session = require("express-session"); // Added session
 const noteRoutes = require("./routes/noteRoutes");
 
+const dbConnect = require("./lib/db");
+
 const app = express();
 
 // Middleware
@@ -20,7 +22,7 @@ app.use(session({
     secret: "worksave-secret-key-123456",
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false } // Set to true if using HTTPS
+    cookie: { secure: false }
 }));
 
 // Make user session available in all layouts
@@ -30,24 +32,24 @@ app.use((req, res, next) => {
     next();
 });
 
-// Log environment variables for debugging
-console.log("-----------------------------------------");
-console.log("Environment Variables Loading...");
-console.log(`MONGO_URI: ${process.env.MONGO_URI ? "Found" : "Missing"}`);
-console.log(`PORT: ${process.env.PORT || "7071 (Default)"}`);
-console.log("-----------------------------------------");
+// Database Connection Middleware
+app.use(async (req, res, next) => {
+    try {
+        await dbConnect();
+        next();
+    } catch (err) {
+        console.error("❌ Database Connection Error:", err.message);
+        res.status(500).send("Database connection failed. Please check your Atlas whitelist and MONGO_URI.");
+    }
+});
 
-// Database Connection
-if (mongoose.connection.readyState === 0) {
-    mongoose
-      .connect(process.env.MONGO_URI)
-      .then(() => {
-        console.log("✅ Success: MongoDB Connected");
-      })
-      .catch((err) => {
-        console.error("❌ Error: Could not connect to MongoDB");
-        console.error(`Reason: ${err.message}`);
-      });
+// Log environment variables for debugging (Only in dev)
+if (process.env.NODE_ENV !== "production") {
+    console.log("-----------------------------------------");
+    console.log("Environment Variables Loading...");
+    console.log(`MONGO_URI: ${process.env.MONGO_URI ? "Found" : "Missing"}`);
+    console.log(`PORT: ${process.env.PORT || "7071 (Default)"}`);
+    console.log("-----------------------------------------");
 }
 
 // Routes

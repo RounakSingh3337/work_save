@@ -8,31 +8,11 @@ const noteRoutes = require("./routes/noteRoutes");
 
 const dbConnect = require("./lib/db");
 
+const dbConnect = require("./lib/db");
+
 const app = express();
 
-// Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "public")));
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "ejs");
-
-// Session Setup
-app.use(session({
-    secret: "worksave-secret-key-123456",
-    resave: false,
-    saveUninitialized: false,
-    cookie: { secure: false }
-}));
-
-// Make user session available in all layouts
-app.use((req, res, next) => {
-    res.locals.loggedIn = !!req.session.userId;
-    res.locals.userId = req.session.userId;
-    next();
-});
-
-// Database Connection Middleware
+// 1. Database Connection Middleware (First priority)
 app.use(async (req, res, next) => {
     try {
         await dbConnect();
@@ -41,6 +21,28 @@ app.use(async (req, res, next) => {
         console.error("❌ Database Connection Error:", err.message);
         res.status(500).send("Database connection failed. Please check your Atlas whitelist and MONGO_URI.");
     }
+});
+
+// 2. Standard Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, "public")));
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "ejs");
+
+// 3. Session Setup
+app.use(session({
+    secret: "worksave-secret-key-123456",
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false }
+}));
+
+// 4. Global Variables
+app.use((req, res, next) => {
+    res.locals.loggedIn = !!req.session.userId;
+    res.locals.userId = req.session.userId;
+    next();
 });
 
 // Log environment variables for debugging (Only in dev)

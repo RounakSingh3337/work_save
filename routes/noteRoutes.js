@@ -78,6 +78,12 @@ router.post("/access", async (req, res) => {
 // GET Notepad Page
 router.get("/:pageId", async (req, res) => {
     const { pageId } = req.params;
+
+    // Ignore favicon requests to prevent DB errors
+    if (pageId === "favicon.ico" || pageId === "favicon.png") {
+        return res.status(404).end();
+    }
+
     let note = await Note.findOne({ pageId });
     if (!note) {
         note = new Note({ 

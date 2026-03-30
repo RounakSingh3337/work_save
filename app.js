@@ -3,23 +3,20 @@ const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
 const bodyParser = require("body-parser");
-const session = require("express-session"); // Added session
+const session = require("express-session");
 const noteRoutes = require("./routes/noteRoutes");
-
-const dbConnect = require("./lib/db");
-
 const dbConnect = require("./lib/db");
 
 const app = express();
 
-// 1. Database Connection Middleware (First priority)
+// 1. Connection Middleware (Crucial for Vercel & Stability)
 app.use(async (req, res, next) => {
     try {
         await dbConnect();
         next();
     } catch (err) {
-        console.error("❌ Database Connection Error:", err.message);
-        res.status(500).send("Database connection failed. Please check your Atlas whitelist and MONGO_URI.");
+        console.error("❌ DB Middleware Error:", err.message);
+        res.status(500).send("<h3>Database Connection Error</h3><p>Could not connect to MongoDB Atlas. Please check your IP Whitelist (0.0.0.0/0) and your MONGO_URI password.</p>");
     }
 });
 
@@ -27,43 +24,32 @@ app.use(async (req, res, next) => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
-app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
-// 3. Session Setup
+// 3. User Session Setup
 app.use(session({
-    secret: "worksave-secret-key-123456",
-    resave: false,
-    saveUninitialized: false,
-    cookie: { secure: false }
+  secret: "secret123",
+  resave: false,
+  saveUninitialized: true,
 }));
 
-// 4. Global Variables
+// Provide session data to all EJS templates
 app.use((req, res, next) => {
-    res.locals.loggedIn = !!req.session.userId;
-    res.locals.userId = req.session.userId;
-    next();
+  res.locals.loggedIn = !!req.session.userId;
+  res.locals.userId = req.session.userId;
+  next();
 });
 
-// Log environment variables for debugging (Only in dev)
-if (process.env.NODE_ENV !== "production") {
-    console.log("-----------------------------------------");
-    console.log("Environment Variables Loading...");
-    console.log(`MONGO_URI: ${process.env.MONGO_URI ? "Found" : "Missing"}`);
-    console.log(`PORT: ${process.env.PORT || "7071 (Default)"}`);
-    console.log("-----------------------------------------");
-}
-
-// Routes
+// 4. Routes
 app.use("/", noteRoutes);
 
-// Export the app for Vercel
+// Export for Vercel
 module.exports = app;
 
-// Only listen locally, skip on Vercel
+// 5. Local Server Execution
 if (process.env.NODE_ENV !== "production") {
     const PORT = process.env.PORT || 7071;
     app.listen(PORT, () => {
-        console.log(`🚀 Local Server running on http://localhost:${PORT}`);
+        console.log(`🚀 Server running on http://localhost:${PORT}`);
     });
 }
